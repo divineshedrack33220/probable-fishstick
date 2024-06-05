@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./login.css">
+    <title>Login</title>
+    <script type="module" src="app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="img/pngegg (9).png" alt="Laundry logo" class="login-image" role="img">
+        </div>
+        <div class="login-container">
+            <h2>Fill Info</h2>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" autocomplete="name" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="" required>
+                </div>
+                <div class="input-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" autocomplete="address-line1" required>
+                </div>
+                <div class="forgot-password">
+                    <a href="bord.html">Forgot Password?</a>
+                </div>
+                <button type="submit" class="login-btn">Send</button>
+                <div id="signInMessage"></div>
+            </form>
+            <div class="signup-link">
+                Need assistance ? <a href="signup.html">Customer care</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

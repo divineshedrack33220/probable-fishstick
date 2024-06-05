@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <title>Laundry Service Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="app.js" defer></script>
+    <style>
+  body {
+    font-family: "Freeman", sans-serif;
+    background-color: #e0f1ff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    padding: 0 20px; /* Added padding to ensure content doesn't touch the edges */
+    
+}
+
+.container {
+    width: 100%;
+    max-width: 360px;
+    background-color: #e0f1ff;
+    padding: 20px; /* Reduced padding */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+    margin-bottom: 100px; /* Ensure space for bottom nav */
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    background-color: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0); /* Adjusted shadow */
+    color: #fff;
+    font-size: 1.2em;
+    z-index: 1000; 
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px; /* Reduced margin */
+}
+
+header h1 {
+    font-size: 1.5em;
+    color: #333;
+}
+
+header h1 span {
+    color: #007bff;
+}
+
+.menu-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.image-box {
+    width: 100%;
+    height: 150px; /* Reduced height */
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px; /* Reduced margin */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    opacity: 0;
+    animation: slide 15s infinite;
+}
+
+.image-box img:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.image-box img:nth-child(2) {
+    animation-delay: 5s;
+}
+
+.image-box img:nth-child(3) {
+    animation-delay: 10s;
+}
+
+@keyframes slide {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    33% { opacity: 1; }
+    38% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+}
+
+.service {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adjusted shadow */
+    transition: background-color 0.3s;
+}
+
+.service img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.service p {
+    margin: 0;
+    color: #333;
+}
+
+.service:hover {
+    background-color: #d0e8ff;
+}
+
+.services a {
+    text-decoration: none; /* Remove underline */
+}
+
+.orders {
+    margin-top: 10px;
+}
+
+.orders h2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.orders h2 a {
+    font-size: 0.8em;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.order {
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adjusted shadow */
+}
+
+.order p {
+    margin: 0;
+    color: #333;
+    text-decoration: none;
+}
+
+.order .status {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.bottom-nav a {
+    color: #1b1b1b;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    font-weight: 200;
+    align-items: center;
+}
+
+.bottom-nav a img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 1px;
+}
+
+/* Responsive styles for larger screens */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+        padding: 20px; /* Adjusted padding */
+    }
+
+    .image-box {
+        height: 200px; /* Adjusted height */
+    }
+
+    .services {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Adjusted column size */
+    }
+
+    .service img {
+        width: 70px; /* Adjusted size */
+        height: 70px; /* Adjusted size */
+    }
+
+    header h1 {
+        font-size: 1.8em; /* Adjusted font size */
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 800px;
+    }
+}
+.gold-star {
+  color: gold;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 15px;
+  width: 60%;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome <span>back!</span></h1>
+            <img style="width: 50px;" src="img/account_circle.png" alt="Menu">
+        </header>
+        <div class="image-box">
+            <img src="img/laundry-detergent-ad-stain-remover-banner-design-vector-25044581.jpg" alt="Slide 1">
+            <img src="img/stain-remover-ad-water-washing-260nw-1538073326.webp" alt="Slide 2">
+            <img src="img/images (19).jpeg" alt="Slide 3">
+        </div>
+        <div class="services">
+            <a href="items.html">
+                <div class="service">
+                    <img src="img/laundry-machine.png" alt="Washing">
+                    <p>Washing Press</p>
+                </div>
+            </a>
+            <a href="items.html">
+                <div class="service">
+                    <img src="img/laundry-machine.png" alt="Steam Press">
+                    <p>Steam Press</p>
+                </div>
+            </a>
+            <a href="index.html">
+                <div class="service">
+                    <img src="img/laundry-machine.png" alt="Dry Cleaning">
+                    <p>Dry Cleaning</p>
+                </div>
+            </a>
+            <a href="items.html">
+                <div class="service">
+                    <img src="img/laundry-machine.png" alt="Dry Cleaning">
+                    <p>Dry Cleaning</p>
+                </div>
+            </a>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <p id="modalContent"></p>
+            </div>
+          </div>
+          <button id="myBtn" style="display: none;">Open Modal</button>
+          
+        <div class="orders">
+            <h2>Customer support </h2>
+            <div class="order">
+                <a style="text-decoration: none;" href="#"><p>Call : #124587541</p></a>
+                <p class="status">Out for Delivery</p>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <a href="bord.html">
+            <img src="img/home.png" alt="Home">
+            <span>Home</span>
+        </a>
+        
+        <a href="packages.html">
+            <img src="img/favorite.png" alt="Services">
+            <span>packages</span>
+        </a>
+        <a href="reviews.html">
+            <img src="img/reviews.png" alt="Profile">
+            <span>reviews</span>
+        </a>
+        <a href="report.html">
+            <img src="img/report_.png" alt="Orders">
+            <span>Reports</span>
+        </a>
+    </div>
+</body>
+</html>

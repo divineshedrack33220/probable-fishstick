@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <title>Review Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="app.js" defer></script>
+    <style>
+        body {
+            font-family: "Freeman", sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 360px;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+            margin-bottom: 60px; /* space for bottom nav */
+        }
+
+        .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    background-color: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0); /* Adjusted shadow */
+    color: #fff;
+    font-size: 1.2em;
+    z-index: 1000; 
+}
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        header h1 span {
+            color: #007bff;
+        }
+
+        .menu-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .review-section {
+            margin-top: 20px;
+            overflow: hidden;
+            height: 150px; /* Set a fixed height for the review container */
+        }
+
+        .reviews-wrapper {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .review {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.158);
+        }
+
+        .review h3 {
+            font-size: 1em;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .review p {
+            font-size: 0.9em;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        .review .rating {
+            color: gold;
+            font-size: 1em;
+        }
+
+        .add-review {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.158);
+        }
+
+        .add-review h2 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .add-review form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-review form input, 
+        .add-review form textarea {
+            font-size: 1em;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-review form button {
+            font-size: 1em;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-review form button:hover {
+            background-color: #0056b3;
+        }
+
+        .bottom-nav a {
+            color: #1b1b1b;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            font-weight: 200;
+            align-items: center;
+        }
+
+        .bottom-nav a img {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 1px;
+        }
+
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Customer <span>Reviews</span></h1>
+            <img style="width: 50px;" src="img/verified.png" alt="Menu">
+        </header>
+        <div class="review-section">
+            <div class="reviews-wrapper">
+                <div class="review">
+                    <h3>John Doe</h3>
+                    <p class="rating">★★★★☆</p>
+                    <p>Great service! My clothes came back spotless and neatly folded. Will definitely use this service again.</p>
+                </div>
+                <div class="review">
+                    <h3>Jane Smith</h3>
+                    <p class="rating">★★★★★</p>
+                    <p>Excellent customer support and quick turnaround time. Highly recommended!</p>
+                </div>
+                <div class="review">
+                    <h3>Mike Johnson</h3>
+                    <p class="rating">★★★☆☆</p>
+                    <p>Service was okay, but there was a slight delay in delivery. Overall, not bad.</p>
+                </div>
+            </div>
+        </div>
+        <div class="add-review">
+            <h2>Add Your Review</h2>
+            <form id="reviewForm">
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                <input type="number" id="rating" name="rating" placeholder="Rating (1-5)" min="1" max="5" required>
+                <textarea id="review" name="review" placeholder="Your Review" rows="4" required></textarea>
+                <button type="submit">Submit Review</button>
+            </form>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <a href="bord.html">
+            <img src="img/home.png" alt="Home">
+            <span>Home</span>
+        </a>
+        <a href="packages.html">
+            <img src="img/favorite.png" alt="Services">
+            <span>Packages</span>
+        </a>
+        <a href="reviews.html">
+            <img src="img/reviews.png" alt="Reviews">
+            <span>Reviews</span>
+        </a>
+        <a href="report.html">
+            <img src="img/report_.png" alt="Bookings">
+            <span>Reports</span>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('reviewForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const rating = document.getElementById('rating').value;
+            const reviewText = document.getElementById('review').value;
+
+            const newReview = document.createElement('div');
+            newReview.classList.add('review');
+            newReview.innerHTML = `
+                <h3>${name}</h3>
+                <p class="rating">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</p>
+                <p>${reviewText}</p>
+            `;
+
+            const reviewsWrapper = document.querySelector('.reviews-wrapper');
+            reviewsWrapper.insertBefore(newReview, reviewsWrapper.firstChild);
+
+            document.getElementById('reviewForm').reset();
+        });
+
+        function cycleReviews() {
+            const reviewsWrapper = document.querySelector('.reviews-wrapper');
+            const reviews = document.querySelectorAll('.review');
+            if (reviews.length > 0) {
+                const firstReview = reviews[0];
+                firstReview.classList.add('slide-up');
+                setTimeout(() => {
+                    reviewsWrapper.appendChild(firstReview);
+                    firstReview.classList.remove('slide-up');
+                }, 500); // Match this duration with the transition duration
+            }
+        }
+
+        setInterval(cycleReviews, 3000); // Change review every 3 seconds
+    </script>
+</body>
+</html>

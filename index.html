@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <title>Laundry Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0a2f4a; 
+            font-family: "Freeman", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        .logo-container {
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 150px; /* Adjust the width as needed */
+            animation: heartbeat 1s infinite;
+        }
+
+        .logo-container .logo-text {
+            font-size: 24px;
+            color: #8fcbf7; 
+            margin-top: 10px;
+        }
+
+        .logo-container .copyright {
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="img/pngegg (9).png" alt="Laundry Logo">
+        <div class="logo-text">Laundry spot</div>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = "login.html"; // Replace with your desired URL
+        }, 3000); // 3 seconds
+    </script>
+</body>
+</html>

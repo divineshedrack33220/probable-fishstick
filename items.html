@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <title>Items to Wash</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="app.js" defer></script>
+    <style>
+        body {
+            font-family: "Freeman", sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: bounceIn 1s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+            margin-bottom: 60px; /* space for bottom nav */
+            box-sizing: border-box;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 100%;
+    background-color: #ffffff;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0); /* Adjusted shadow */
+    color: #fff;
+    font-size: 1.2em;
+    z-index: 1000; 
+}
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        header h1 span {
+            color: #007bff;
+        }
+
+        .menu-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        .items-section {
+            margin-top: 20px;
+        }
+
+        .items-section h2 {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.158);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .item:hover {
+            transform: translateY(-5px);
+        }
+
+        .item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details h3 {
+            font-size: 1em;
+            color: #007bff;
+            margin: 0;
+        }
+
+        .item-details p {
+            font-size: 0.9em;
+            color: #333;
+            margin: 5px 0 0 0;
+        }
+
+        .cart-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cart-button button {
+            font-size: 1em;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cart-button button:hover {
+            background-color: #0056b3;
+        }
+
+        .bottom-nav a {
+            color: #1b1b1b;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            font-weight: 200;
+            align-items: center;
+        }
+
+        .bottom-nav a img {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 1px;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            justify-content: center; 
+            align-items: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px; 
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: bounceIn 0.5s ease-in-out;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .quantity-controls button {
+            font-size: 1.2em;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #f0f8ff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #e0e8ff;
+        }
+
+        .quantity-controls span {
+            font-size: 1.2em;
+            padding: 0 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .modal-footer button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-footer button:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+            50% {
+                -webkit-transform: translateY(-20px);
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            body {
+                padding: 40px;
+            }
+
+            .bottom-nav {
+                padding: 10px 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 40px;
+            }
+
+            .modal-content {
+                margin: 10% auto; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Select <span>Items to Wash</span></h1>
+            <img style="width: 50px;" src="img/local_laundry.png" alt="Menu">
+        </header>
+        <div class="items-section">
+            <h2>Available Items</h2>
+            <div class="item" data-name="Shirt" data-price="5.00">
+                <img src="img/shirt.png" alt="Shirt">
+                <div class="item-details">
+                    <h3>Shirt</h3>
+                    <p>Price: $5.00</p>
+                </div>
+            </div>
+            <div class="item" data-name="Pants" data-price="7.00">
+                <img src="img/shirt.png" alt="Pants">
+                <div class="item-details">
+                    <h3>Pants</h3>
+                    <p>Price: $7.00</p>
+                </div>
+            </div>
+            <div class="item" data-name="Jacket" data-price="10.00">
+                <img src="img/shirt.png" alt="Jacket">
+                <div class="item-details">
+                    <h3>Jacket</h3>
+                    <p>Price: $10.00</p>
+                </div>
+            </div>
+            <div class="item" data-name="Dress" data-price="8.00">
+                <img src="img/shirt.png" alt="Dress">
+                <div class="item-details">
+                    <h3>Dress</h3>
+                    <p>Price: $8.00</p>
+                </div>
+            </div>
+            <div class="item" data-name="Dress" data-price="8.00">
+                <img src="img/shirt.png" alt="Dress">
+                <div class="item-details">
+                    <h3>Dress</h3>
+                    <p>Price: $8.00</p>
+                </div>
+            </div>
+            <div class="item" data-name="Dress" data-price="8.00">
+                <img src="img/shirt.png" alt="Dress">
+                <div class="item-details">
+                    <h3>Dress</h3>
+                    <p>Price: $8.00</p>
+                </div>
+            </div>
+            <div class="cart-button">
+                <button id="cartButton">View Cart</button>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <a href="bord.html">
+            <img src="img/home.png" alt="Home">
+            <span>Home</span>
+        </a>
+        <a href="packages.html">
+            <img src="img/favorite.png" alt="Services">
+            <span>Packages</span>
+        </a>
+        <a href="reviews.html">
+            <img src="img/reviews.png" alt="Reviews">
+            <span>Reviews</span>
+        </a>
+        <a href="report.html">
+            <img src="img/report_.png" alt="Bookings">
+            <span>Reports</span>
+        </a>
+        
+    </div>
+
+    <!-- Item Quantity Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalItemName">Item Name</h2>
+            <p id="modalItemPrice">Price: $0.00</p>
+            <div class="quantity-controls">
+                <button id="decreaseQty">-</button>
+                <span id="itemQty">1</span>
+                <button id="increaseQty">+</button>
+            </div>
+            <div class="modal-footer">
+                <button id="addToCart">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Modal -->
+    <div id="summaryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Summary</h2>
+            <div id="orderSummary"></div>
+            <div class="modal-footer">
+                <button id="proceedToPayment">Pay</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = document.querySelectorAll('.item');
+            const itemModal = document.getElementById('itemModal');
+            const summaryModal = document.getElementById('summaryModal');
+            const modalItemName = document.getElementById('modalItemName');
+            const modalItemPrice = document.getElementById('modalItemPrice');
+            const itemQty = document.getElementById('itemQty');
+            const addToCartButton = document.getElementById('addToCart');
+            const proceedToPaymentButton = document.getElementById('proceedToPayment');
+            const cartButton = document.getElementById('cartButton');
+            let currentQty = 1;
+            let cart = [];
+
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const itemName = item.getAttribute('data-name');
+                    const itemPrice = item.getAttribute('data-price');
+                    modalItemName.textContent = itemName;
+                    modalItemPrice.textContent = `Price: $${itemPrice}`;
+                    currentQty = 1;
+                    itemQty.textContent = currentQty;
+                    itemModal.style.display = 'flex';
+                });
+            });
+
+            document.getElementById('decreaseQty').addEventListener('click', () => {
+                if (currentQty > 1) {
+                    currentQty--;
+                    itemQty.textContent = currentQty;
+                }
+            });
+
+            document.getElementById('increaseQty').addEventListener('click', () => {
+                currentQty++;
+                itemQty.textContent = currentQty;
+            });
+
+            addToCartButton.addEventListener('click', () => {
+                const itemName = modalItemName.textContent;
+                const itemPrice = parseFloat(modalItemPrice.textContent.replace('Price: $', ''));
+                const item = { name: itemName, price: itemPrice, quantity: currentQty };
+                cart.push(item);
+                itemModal.style.display = 'none';
+            });
+
+            cartButton.addEventListener('click', () => {
+                const orderSummary = document.getElementById('orderSummary');
+                orderSummary.innerHTML = '';
+                cart.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+                    orderSummary.appendChild(itemElement);
+                });
+                summaryModal.style.display = 'flex';
+            });
+
+            proceedToPaymentButton.addEventListener('click', () => {
+                const email = 'your-email@example.com';
+                const subject = 'New Order';
+                const body = cart.map(item => `${item.name}: ${item.price} x ${item.quantity}`).join('\n');
+                window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                summaryModal.style.display = 'none';
+                // Redirect to a payment gateway (replace with actual gateway URL)
+                window.location.href = 'https://payment-gateway.com';
+            });
+
+            document.querySelectorAll('.close').forEach(button => {
+                button.addEventListener('click', () => {
+                    itemModal.style.display = 'none';
+                    summaryModal.style.display = 'none';
+                });
+            });
+
+            window.onclick = function(event) {
+                if (event.target == itemModal || event.target == summaryModal) {
+                    itemModal.style.display = 'none';
+                    summaryModal.style.display = 'none';
+                }
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&display=swap" rel="stylesheet">
+    <title>Packages - Laundry Service</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+        font-family: "Freeman", sans-serif;
+        background-color: #f0f8ff;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Corrected height */
+        flex-direction: column;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 370px; /* Adjusted for phone screen */
+        background-color: #f0f8ff;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
+        margin-bottom: 0px;
+        height: 80%;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    header h1 {
+        font-size: 1.5em;
+        color: #333;
+    }
+
+    header h1 span {
+        color: #007bff;
+    }
+
+    .packages {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap:5px;
+    }
+
+    .package {
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px; /* Adjusted padding */
+        text-align: center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.171);
+        transition: background-color 0.3s;
+        margin-bottom: 10px; /* Adjusted margin */
+        width: 100%;
+    }
+
+    .package h2 {
+        margin: 0;
+        color: #333;
+        font-size: 1.2em;
+    }
+
+    .package p {
+        margin: 10px 0;
+        color: #666;
+    }
+
+    .package .price {
+        color: #007bff;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .package img {
+        max-width: 100px; 
+        margin-bottom: 10px;
+    }
+
+    .package:hover {
+        background-color: #d0e8ff;
+    }
+
+    .go-back {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+    }
+
+    .go-back:hover {
+        background-color: #084a91;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+        position: relative;
+        text-align: center;
+    }
+
+    .modal-content img {
+        max-width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .close {
+        color: #353535;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 58px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-content button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 20px;
+    }
+
+    .modal-content button:hover {
+        background-color: #0056b3;
+    }
+</style>
+<body>
+    <a href="javascript:history.back()" class="go-back"> Back</a>
+    
+    <div class="container">
+        <header>
+            <h1>Our <span>Packages</span></h1>
+            <img style="width: 50px;" src="img/inventory.png" alt="Menu">
+        </header>
+        <div class="packages">
+            <div class="package" onclick="showModal('Basic Package', 'Includes washing and drying', '$10', 'img/icons8-dollar-coin-94.png')">
+                <img src="img/icons8-dollar-coin-94.png" alt="Basic Package">
+                <h2>Basic Package</h2>
+            </div>
+            <div class="package" onclick="showModal('Standard Package', 'Includes washing, drying, and folding', '$15', 'img/icons8-new-product-94.png')">
+                <img src="img/icons8-new-product-94.png" alt="Standard Package">
+                <h2>Standard Package</h2>
+            </div>
+            <div class="package" onclick="showModal('Premium Package', 'Includes washing, drying, folding, and ironing', '$20', 'img/icons8-vip-94.png')">
+                <img src="img/icons8-vip-94.png" alt="Premium Package">
+                <h2>Premium Package</h2>
+            </div>
+            <div class="package" onclick="showModal('Deluxe Package', 'Includes all premium services plus dry cleaning', '$30', 'img/icons8-trophy-94.png')">
+                <img src="img/icons8-trophy-94.png" alt="Deluxe Package">
+                <h2>Deluxe Package</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div id="packageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="packageImage" src="img/icons8-today-94.png" alt="Package Image">
+            <h2 id="packageName"></h2>
+            <p id="packageDescription"></p>
+            <p id="packagePrice"></p>
+            <button onclick="redirectToOrderPage()">Get Package</button>
+        </div>
+    </div>
+
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    
+    <script>
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        var selectedPackage = {};
+
+        function showModal(name, description, price, imageSrc) {
+            var modal = document.getElementById("packageModal");
+            var nameField = document.getElementById("packageName");
+            var descriptionField = document.getElementById("packageDescription");
+            var priceField = document.getElementById("packagePrice");
+            var imageField = document.getElementById("packageImage");
+
+            selectedPackage = { name, description, price, imageSrc };
+
+            nameField.textContent = name;
+            descriptionField.textContent = description;
+            priceField.textContent = "Price: " + price;
+            imageField.src = imageSrc;
+
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("packageModal");
+            modal.style.display = "none";
+        }
+
+        function redirectToOrderPage() {
+            var user = firebase.auth().currentUser;
+            if (user) {
+                var userId = user.uid;
+                var orderData = {
+                    packageName: selectedPackage.name,
+                    packageDescription: selectedPackage.description,
+                    packagePrice: selectedPackage.price,
+                    packageImageSrc: selectedPackage.imageSrc,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                };
+
+                firebase.database().ref('users/' + userId + '/orders').push(orderData)
+                    .then(function() {
+                        // Redirect to payment gateway after saving to Firebase
+                        window.location.href = 'https://payment_gateway_url';
+                    })
+                    .catch(function(error) {
+                        console.error("Error saving to Firebase: ", error);
+                    });
+            } else {
+                console.error("User not authenticated");
+                // Handle user not authenticated
+            }
+        }
+
+        // // Firebase authentication state observer
+        // firebase.auth().onAuthStateChanged(function(user) {
+        //     if (user) {
+        //         // User is signed in.
+        //         console.log("User is signed in:", user);
+        //     } else {
+        //         // No user is signed in. Redirect to sign-in page.
+        //         window.location.href = '';
+        //     }
+        // });
+    </script>
+</body>
+</html>
